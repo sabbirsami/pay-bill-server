@@ -19,16 +19,30 @@ async function run() {
     try {
         await client.connect();
         const billCollection = client.db("payBill").collection("bills");
-        console.log("Here");
 
+        // GET ALL BILL FROM DATABASE
         app.get("/bills", async (req, res) => {
-            const result = await billCollection.find().toArray();
+            const query = {};
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+            const cursor = billCollection.find(query);
+            const result = await cursor
+                .skip(page * size)
+                .limit(size)
+                .toArray();
             res.send(result);
         });
 
+        // GET TOTAL BILL
         app.get("/billsCount", async (req, res) => {
-            const count = await billCollection.find().count();
+            const count = await billCollection.countDocuments();
             res.send({ count });
+        });
+
+        //LOAD DATA USE QUERY
+
+        app.get("/bills", async (req, res) => {
+            const query = {};
         });
     } finally {
     }
