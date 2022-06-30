@@ -33,9 +33,13 @@ async function run() {
                 .toArray();
             res.send(result);
         });
-        app.get("/bills", async (req, res) => {
+
+        app.get("/bill-list", async (req, res) => {
             const result = await billCollection.find().toArray();
-            res.send(result);
+            let total = 0;
+            result.forEach((r) => (total = total + parseInt(r.amount)));
+            // console.log(total);
+            res.send({ total });
         });
 
         // GET TOTAL BILL
@@ -76,9 +80,15 @@ async function run() {
         // GET DATA FROM CLIENT SIDE
         app.post("/bills", async (req, res) => {
             const newBill = req.body;
-            console.log(newBill);
+            // console.log(newBill);
             const result = await billCollection.insertOne(newBill);
-            res.send(result);
+            // console.log(result);
+            if (result.acknowledged === true) {
+                res.send({ status: "ok" });
+            } else {
+                res.send({ status: "fail" });
+            }
+            // res.send(result);
         });
         app.get("/bills/:id", async (req, res) => {
             const id = req.params.id;
