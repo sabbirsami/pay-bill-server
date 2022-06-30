@@ -18,8 +18,13 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect();
-        const userCollection = client.db("creativeAgency").collection("users");
+        const billCollection = client.db("payBill").collection("bills");
         console.log("Here");
+
+        app.get("/bills", async (req, res) => {
+            const result = await billCollection.find().toArray();
+            res.send(result);
+        });
     } finally {
     }
 }
@@ -27,7 +32,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-    res.send("Creative Agency");
+    res.send("Pay Bill");
 });
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
