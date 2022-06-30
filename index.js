@@ -40,9 +40,16 @@ async function run() {
         });
 
         //LOAD DATA USE QUERY
-
         app.get("/bills", async (req, res) => {
             const query = {};
+        });
+
+        // GET DATA FROM CLIENT SIDE
+        app.post("/bills", async (req, res) => {
+            const newBill = req.body;
+            console.log(newBill);
+            const result = await billCollection.insertOne(newBill);
+            res.send(result);
         });
     } finally {
     }
