@@ -25,6 +25,11 @@ async function run() {
             const result = await billCollection.find().toArray();
             res.send(result);
         });
+
+        app.get("/billsCount", async (req, res) => {
+            const count = await billCollection.find().count();
+            res.send({ count });
+        });
     } finally {
     }
 }
