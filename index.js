@@ -39,7 +39,7 @@ async function run() {
             let total = 0;
             result.forEach((r) => (total = total + parseInt(r.amount)));
             // console.log(total);
-            res.send({ total });
+            res.send({ result, total });
         });
 
         // GET TOTAL BILL
@@ -72,6 +72,11 @@ async function run() {
         });
 
         app.get("/registration/:email", async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            res.send(user);
+        });
+        app.get("/bill-list/:email", async (req, res) => {
             const email = req.params.email;
             const user = await userCollection.findOne({ email: email });
             res.send(user);
