@@ -76,10 +76,22 @@ async function run() {
             const user = await userCollection.findOne({ email: email });
             res.send(user);
         });
-        app.get("/bill-list/:email", async (req, res) => {
+        app.get("/bills/:email", async (req, res) => {
             const email = req.params.email;
-            const user = await userCollection.findOne({ email: email });
+            const user = await billCollection.findOne({ email: email });
             res.send(user);
+        });
+        app.put("/bills/:email", async (req, res) => {
+            const email = req.params.email;
+            const updateBill = req.body;
+            const result = await billCollection.updateOne(
+                { email: email },
+                {
+                    $set: updateBill,
+                },
+                { upsert: true }
+            );
+            res.send(result);
         });
 
         // GET DATA FROM CLIENT SIDE
