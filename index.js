@@ -59,8 +59,6 @@ async function run() {
             const newUser = req.body;
             // console.log(newUser.email);
             const email = req.body.email;
-            // const name = req.body.name;
-            // const password = par;
             const result = await userCollection.insertOne(newUser);
             const token = jwt.sign({ email: email }, process.env.WEB_TOKEN);
             console.log(token);
